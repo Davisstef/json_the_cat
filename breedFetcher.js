@@ -2,17 +2,16 @@ const request = require('request');
 
 const fetchbreedNameDescription = (breedName, callback) => {
   const url = `https://api.thecatapi.com/v1/breeds/search?q=${breedName}`;
-  request(url, (error, body) => {
+  request(url, (error, response, body) => {
     if (error) {
       return callback(error, null);
-    }
-
-    const data = JSON.parse(body);
-    const breed = data[0];
-    if (breed) {
-      callback(null, breed.description);
     } else {
-      callback('Breed Not Found');
+      const data = JSON.parse(body);
+      if (data[0] === undefined) {
+        callback(null, "No cat exists");
+      } else {
+        console.log(data[0].description);
+      }
     }
   });
 };
